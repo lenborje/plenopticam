@@ -319,8 +319,10 @@ class ViewWidget(tk.Canvas, LfpViewpoints):
         font = ImageFont.load_default()
         img = Image.new("RGBA", self.shape[:2][::-1], color=(0, 0, 0, 0))
         draw = ImageDraw.Draw(img)
-        w, h = draw.textsize(text, font)
-        draw.text(((self.shape[1] - w) / 2, (self.shape[0] - h) / 2), text, fill=(0, 0, 0), font=font)
+        left, top, right, bottom = draw.textbbox((0, 0), text, font=font)
+        w, h = right-left, bottom-top
+        draw.text(((self.shape[1] - w) / 2-left, (self.shape[0] - h) / 2-top),
+                  text, fill=(0, 0, 0), font=font)
         ImageDraw.Draw(img)
 
         return img

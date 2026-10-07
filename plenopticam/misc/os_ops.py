@@ -128,7 +128,7 @@ def get_img_list(img_dir, vp=1):
 
     if vp:
         vp_dim = int(np.sqrt(len(img_list)))
-        img_list = np.reshape(img_list, newshape=(vp_dim, vp_dim) + img_list[0].shape, order='C')
+        img_list = np.reshape(img_list, (vp_dim, vp_dim) + img_list[0].shape, order='C')
 
     return img_list
 
