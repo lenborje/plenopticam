@@ -21,9 +21,16 @@ __license__ = """
 """
 
 from setuptools import setup, find_packages
-from plenopticam import __version__
-from sys import platform
-from docutils import core
+import re
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent
+__version__ = re.search(
+    r"^__version__ = [\"']([^\"']+)",
+    (ROOT / "plenopticam/__init__.py").read_text(encoding="utf-8"),
+    re.MULTILINE,
+).group(1)
+from sys import platform, argv
 import os
 
 APP = ['plenopticam/gui/top_level.py']
@@ -47,7 +54,7 @@ OPTIONS = {
                  'colour-demosaicing', 'colour', 'color-matcher', 'color-space-converter'],
 }
 
-if platform == 'darwin':
+if platform == 'darwin' and 'py2app' in argv:
     extra_options = dict(
         setup_requires=['py2app'],
         app=APP,
@@ -67,19 +74,13 @@ else:
  )
 
 path = os.path.dirname(os.path.realpath(__file__))
-# parse description section text
-readme_path = os.path.join(path, 'README.rst')
-with open(readme_path, 'r') as f:
-    data = f.read()
-    readme_nodes = list(core.publish_doctree(data))
-    for node in readme_nodes:
-        if node.astext().startswith('Description'):
-                long_description = node.astext().rsplit('\n\n')[1]
+# Build metadata must not import the application or its runtime dependencies.
+long_description = (ROOT / 'README.rst').read_text(encoding='utf-8')
 
 # parse package requirements from text file
 reqtxt_path = os.path.join(path, 'requirements.txt')
 with open(reqtxt_path, 'r') as f:
-    req_list = f.read().split('\n')
+    req_list = [line.strip() for line in f if line.strip() and not line.startswith('#')]
 
 setup(
       name='plenopticam',
@@ -98,6 +99,7 @@ setup(
       packages=find_packages(),
       install_requires=req_list,
       include_package_data=True,
+      package_data={'plenopticam.cfg': ['cfg.json'], 'plenopticam.gui': ['icns/*']},
       zip_safe=False,
       **extra_options
       )
