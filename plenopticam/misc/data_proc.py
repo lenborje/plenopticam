@@ -22,7 +22,7 @@ __license__ = """
 
 
 import numpy as np
-from scipy.interpolate import interp2d
+from scipy.interpolate import RectBivariateSpline
 from color_space_converter import yuv_conv
 
 from plenopticam.misc.normalizer import Normalizer
@@ -54,6 +54,22 @@ def safe_get(any_dict, *keys):
     return any_dict
 
 
+def interpolate_grid(x, y, values, kind='linear'):
+    """Interpolate a regular image grid with the historical (x, y) convention.
+
+    Adapted from Doridian/plenopticam f38349f (GPL-3.0). The transposes
+    preserve interp2d's row/column ordering; explicit degrees preserve its
+    linear, cubic and quintic behavior at both application call sites.
+    """
+    degree = {'linear': 1, 'cubic': 3, 'quintic': 5}[kind]
+    spline = RectBivariateSpline(x, y, np.asarray(values).T, kx=degree, ky=degree, s=0)
+
+    def evaluate(new_x, new_y):
+        return spline(new_x, new_y).T
+
+    return evaluate
+
+
 def img_resize(img, x_scale=1, y_scale=None, method=None, new_shape=None, norm_opt=False):
     """ perform image interpolation based on scipy lib """
 
@@ -80,7 +96,7 @@ def img_resize(img, x_scale=1, y_scale=None, method=None, new_shape=None, norm_o
     # interpolate
     new_img = np.zeros([y_len, x_len, p])
     for p in range(p):
-        f = interp2d(range(m), range(n), img[:, :, p], kind=method)
+        f = interpolate_grid(range(m), range(n), img[:, :, p], kind=method)
         new_img[:, :, p] = f(np.linspace(0, m - 1, x_len), np.linspace(0, n - 1, y_len))
 
     # normalize to the 0-1 range
