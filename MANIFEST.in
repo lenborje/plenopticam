@@ -1,2 +1,5 @@
 include README.rst
 include LICENSE.rst
+include requirements.txt
+include CODEX-FORK-INVENTORY.md
+include CODEX-PLENOPTICAM-REPORT.md
