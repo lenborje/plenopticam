@@ -71,7 +71,7 @@ class LfpDecoder(object):
             self.decode_lfc()
 
         # C.x bundle type decoding
-        elif self._lfp_path.lower().endswith(SUPP_FILE_EXT[2:]):
+        elif self._lfp_path.lower().endswith(SUPP_FILE_EXT[3:]):
             self.decode_bundle()
 
         # raw type decoding
