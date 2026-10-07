@@ -2,14 +2,14 @@ numpy
 scipy>=1.6.0
 colour-demosaicing>=0.2.2
 colour
-color-matcher==0.4.0
+color-matcher>=0.6.0
 color-space-converter>=0.1.4
 imageio>=2.17.0
 docutils
 Pillow>=9.0.1
 requests
-depthy>=0.3.0
+# Depthy fixes by Doridian (GPL-3.0): modern packaging, scipy.datasets, NumPy 2.
+depthy @ git+https://github.com/Doridian/depthy.git@35a21fb86722bb9de8e40b6b3f61b1b3be365b2f
 certifi>=2020.06.20
 scikit-image>=0.18.0
-tifffile==2022.4.8
-pyinstaller==5.13.1
+tifffile>=2025.6.11
