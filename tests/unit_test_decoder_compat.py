@@ -17,4 +17,3 @@ class RawDispatchTests(unittest.TestCase):
             getattr(obj, expected).assert_called_once_with()
             for other in {'decode_raw', 'decode_bundle', 'decode_lfc'}-{expected}:
                 getattr(obj, other).assert_not_called()
-
