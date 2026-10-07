@@ -84,13 +84,21 @@ Installation
 
 |
 
-* from source:
-    1. install Python from https://www.python.org/
-    2. download the source_ using ``$ git clone https://github.com/hahnec/plenopticam.git``
-    3. go to the root directory ``$ cd plenopticam``
-    4. load other packages ``$ python3 -m pip install -r requirements.txt``
-    5. install with ``$ sudo python3 setup.py install`` from root directory
-    6. if installation ran smoothly, enter ``$ sudo plenopticam -g`` to the command line
+* from source (standard CPython 3.12 or newer):
+    1. clone your chosen PlenoptiCam repository and enter its directory
+    2. create a virtual environment with ``python3 -m venv .venv``
+    3. install with ``.venv/bin/python -m pip install .``
+    4. launch with ``.venv/bin/plenopticam -g``
+
+    The GUI requires a CPython installation with Tk support. Ordinary package
+    installation does not require PyInstaller or py2app. The patched Depthy
+    dependency is identified by an immutable Git revision and requires Git and
+    network access during installation.
+
+    See `CPython modernization report <CODEX-PLENOPTICAM-REPORT.md>`_ for the
+    verified Apple Silicon environment, private Tk setup, test results and
+    full-resolution Illum processing commands. `Fork inventory
+    <CODEX-FORK-INVENTORY.md>`_ records reused work and its provenance.
 
 Usage
 =====
